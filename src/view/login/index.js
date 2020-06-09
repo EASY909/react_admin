@@ -10,11 +10,9 @@ function Login(props) {
     { txt: "注册", current: false, type: "register" }])
 
     const handelTab = (data) => {
-
          menuTab.forEach(data => {
             data.current = false;
         });
-       
         data.current = true;
         setMenuTab(menuTab)
         setformType(data.type);
