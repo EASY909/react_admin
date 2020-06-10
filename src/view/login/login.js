@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Form, Input, Button, Checkbox, Row, Col } from 'antd';
+import { Form, Input, Button, Checkbox, Row, Col, message } from 'antd';
 import { UserOutlined, LockOutlined, SmileOutlined } from '@ant-design/icons';
 import { checkPassword, validateCode } from "../../utils/validate";
-import { Login, getSms } from "../../api/login"
+import { Login } from "../../api/login"
+import Code from "../../component/code"
 function LoginIndex(props) {
+    const [username, setUsername] = useState("");
 
-    // const [sliderSwiper, setSliderSwiper] = useState(null);
     const onFinish = values => {
         Login().then(res => {
             console.log(res);
@@ -14,13 +15,6 @@ function LoginIndex(props) {
         })
         console.log('Received values of form: ', values);
     };
-    const GetSms = () => {
-        getSms().then(res => {
-            console.log(res);
-        }).catch(error => {
-            console.log(error);
-        })
-    }
     return (
         <Form
             name="normal_login"
@@ -34,7 +28,7 @@ function LoginIndex(props) {
                 { type: "email", message: "邮箱格式不正确！" }
                 ]}
             >
-                <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Email" />
+                <Input value={username} onChange={(event) => setUsername(event.target.value)} prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Email" />
             </Form.Item>
             <Form.Item
                 name="password"
@@ -60,7 +54,9 @@ function LoginIndex(props) {
                             prefix={<SmileOutlined className="site-form-item-icon" />}
                             placeholder="Code"
                         /></Col>
-                    <Col span={8}><Button type="primary" onClick={GetSms}>获取验证码</Button></Col>
+                    <Col span={8}>
+                        <Code username={username} />
+                    </Col>
                 </Row>
             </Form.Item>
             <Form.Item>

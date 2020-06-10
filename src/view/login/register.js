@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, Input, Button, Checkbox, Row, Col } from 'antd';
 import { UserOutlined, LockOutlined, SmileOutlined } from '@ant-design/icons';
-import { checkPassword,validateCode } from "../../utils/validate"
+import { checkPassword, validateCode } from "../../utils/validate";
+import Code from "../../component/code"
 const Register = () => {
+    const [username, setUsername] = useState("");
+    const [pwd, setPwd] = useState("");
     const onFinish = values => {
         console.log('Received values of form: ', values);
     };
@@ -20,7 +23,7 @@ const Register = () => {
                 { type: "email", message: "邮箱格式不正确！" }
                 ]}
             >
-                <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Email" />
+                <Input value={username} onChange={(event) => setUsername(event.target.value)} prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Email" />
             </Form.Item>
             <Form.Item
                 name="password"
@@ -32,11 +35,30 @@ const Register = () => {
                     prefix={<LockOutlined className="site-form-item-icon" />}
                     type="password"
                     placeholder="Password"
+                    value={pwd}
+                    onChange={(event) => setPwd(event.target.value)}
                 />
             </Form.Item>
             <Form.Item
                 name="repassword"
-                rules={[{ required: true, message: 'Please input your Password!' }]}
+                rules={[
+                    {
+                      required: true,
+                      message: '重复密码不能为空！',
+                    },
+                    ({ getFieldValue }) => ({
+                      validator(rule, value) {
+                         if(getFieldValue('password') !== value){
+                            return Promise.reject('密码不相同！');
+                         }
+                         return Promise.resolve();
+                        // if () {
+                        //  
+                        // }
+                        // 
+                      },
+                    }),
+                  ]}
             >
                 <Input
                     prefix={<LockOutlined className="site-form-item-icon" />}
@@ -48,7 +70,7 @@ const Register = () => {
                 name="Code"
                 rules={[{ required: true, message: 'Please input your Code!' },
                 { pattern: validateCode, message: "验证码格式不正确！" }
-            ]}
+                ]}
             >
                 <Row gutter={13}>
                     <Col span={16}>
@@ -56,7 +78,7 @@ const Register = () => {
                             prefix={<SmileOutlined className="site-form-item-icon" />}
                             placeholder="Code"
                         /></Col>
-                    <Col span={8}><Button type="primary">获取验证码</Button></Col>
+                    <Col span={8}><Code username={username} /></Col>
                 </Row>
             </Form.Item>
             <Form.Item>
