@@ -44,7 +44,7 @@ export function getUserRole(data = {}){
     * 注册
     */
 
-    export function Register(data){
+    export function register(data){
       return service.request({
         method: 'post',
         url: '/register/',

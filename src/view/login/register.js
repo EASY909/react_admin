@@ -1,13 +1,29 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Checkbox, Row, Col } from 'antd';
+import { Form, Input, Button, Checkbox, Row, Col, message } from 'antd';
 import { UserOutlined, LockOutlined, SmileOutlined } from '@ant-design/icons';
 import { checkPassword, validateCode } from "../../utils/validate";
-import Code from "../../component/code"
-const Register = () => {
+import PropTypes from "prop-types"
+import Code from "../../component/code";
+import { register } from "../../api/login"
+const Register = (props) => {
     const [username, setUsername] = useState("");
-    const [pwd, setPwd] = useState("");
+    const [password, setPassword] = useState("");
+    const [code, setCode] = useState("");
+    const { registerSuccess } = props;
+
     const onFinish = values => {
-        console.log('Received values of form: ', values);
+        let requestData = {
+            username: username,
+            password: password,
+            code: code,
+            model: "register"
+        };
+        register(requestData).then(res => {
+            message.success(res.data.message, 3);
+            registerSuccess()
+        }).catch(error => {
+            console.log(error);
+        })
     };
 
     return (
@@ -35,30 +51,26 @@ const Register = () => {
                     prefix={<LockOutlined className="site-form-item-icon" />}
                     type="password"
                     placeholder="Password"
-                    value={pwd}
-                    onChange={(event) => setPwd(event.target.value)}
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
                 />
             </Form.Item>
             <Form.Item
                 name="repassword"
                 rules={[
                     {
-                      required: true,
-                      message: '重复密码不能为空！',
+                        required: true,
+                        message: '重复密码不能为空！',
                     },
                     ({ getFieldValue }) => ({
-                      validator(rule, value) {
-                         if(getFieldValue('password') !== value){
-                            return Promise.reject('密码不相同！');
-                         }
-                         return Promise.resolve();
-                        // if () {
-                        //  
-                        // }
-                        // 
-                      },
+                        validator(rule, value) {
+                            if (getFieldValue('password') !== value) {
+                                return Promise.reject('密码不相同！');
+                            }
+                            return Promise.resolve();
+                        },
                     }),
-                  ]}
+                ]}
             >
                 <Input
                     prefix={<LockOutlined className="site-form-item-icon" />}
@@ -77,16 +89,28 @@ const Register = () => {
                         <Input
                             prefix={<SmileOutlined className="site-form-item-icon" />}
                             placeholder="Code"
+                            value={code}
+                            onChange={(event) => setCode(event.target.value)}
                         /></Col>
-                    <Col span={8}><Code username={username} /></Col>
+                    <Col span={8}><Code username={username} module="register" /></Col>
                 </Row>
             </Form.Item>
             <Form.Item>
-                <Button type="danger" block>
+                <Button type="danger" htmlType="submit" block>
                     注册</Button>
             </Form.Item>
         </Form>
     )
+};
+
+Register.defaultProps = {
+
+    registerSuccess: null,
+
+};
+
+Register.propTypes = {
+    registerSuccess: PropTypes.func
 };
 
 export default Register;

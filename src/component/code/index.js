@@ -4,14 +4,14 @@ import { getSms } from "../../api/login"
 import { PoweroffOutlined } from '@ant-design/icons';
 import PropTypes from "prop-types"
 const Code = memo((props) => {
-    const { username } = props;
+    const { username,module } = props;
     const [isSend, setIsSend] = useState(false);
     const [but, setBut] = useState({
         butLoading: false,
         butTxt: "获取验证码",
         butDis: false
     });
-
+ 
     const countDown = useEffect(() => {
         let sec = 10, timer = null;
         if (timer) clearInterval(timer);
@@ -49,7 +49,7 @@ const Code = memo((props) => {
 
         let resData = {
             username: username,
-            module: "login"
+            module: module
         }
 
         getSms(resData).then(res => {

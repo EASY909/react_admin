@@ -1,0 +1,40 @@
+.navIndex {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: $navMenu;
+    background-color: #001529;
+    @include webkit(transition, all 0.3s ease 0s);
+
+    svg {
+        font-size: 20px;
+        margin-right: 10px;
+    }
+
+    .logo {
+        text-align: center;
+
+        img {
+            margin: 28px auto 25px;
+            width: 92px;
+            @include webkit(transition, all 0.3s ease 0s);
+        }
+    }
+}
+
+.open {
+    .navIndex {
+        width: $navMenu;
+    }
+}
+
+.close {
+    .navIndex {
+        width: $navMenuMin;
+
+        .logo img {
+            width: 60%;
+        }
+    }
+}

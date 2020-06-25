@@ -17,7 +17,10 @@ function Login(props) {
         setMenuTab(menuTab)
         setformType(data.type);
     }
-
+    const registerSuccess=()=>{
+        setformType("login");
+    }
+    
     return (
         <div className="login">
             <div className="login-wrap">
@@ -26,7 +29,7 @@ function Login(props) {
                         return <li onClick={handelTab.bind(this, item)} className={item.current ? "current" : null} key={index}>{item.txt}</li>
                     })}
                 </ul>
-                {formType === "login" ? <LoginIndex></LoginIndex> : <Register></Register>}
+                {formType === "login" ? <LoginIndex></LoginIndex> : <Register registerSuccess={registerSuccess}></Register>}
             </div >
         </div >
     )

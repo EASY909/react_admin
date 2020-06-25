@@ -1,0 +1,34 @@
+.header-icon {
+    padding: 0 32px;
+    svg {
+      font-size: 25px;
+      margin-bottom: -8px;
+      cursor: pointer;
+    }
+  }
+  .open {
+    .headerIndex {
+      left: $navMenu;
+    }
+  }
+  .close {
+    .headerIndex {
+      left: $navMenuMin;
+    }
+  }
+  .user-info {
+    height: 100%;
+    padding: 0 32px;
+    + .header-icon {
+      padding: 0 32px;
+    }
+    border: 1px solid #ededed;
+    img {
+      width: 36px;
+      height: 36px;
+      border-radius: 18px;
+      line-height: 18px;
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+  }

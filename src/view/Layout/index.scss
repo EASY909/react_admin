@@ -1,0 +1,17 @@
+
+.headerIndex {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: $navMenu;
+    height: 75px;
+    background-color: #fff;
+    line-height: 75px;
+    @include webkit(box-shadow, 0 3px 16px 0 rgba(0, 0, 0, 0.1));
+    @include webkit(transition, all 0.3s ease 0s);
+}
+.mainIndex {
+    height: 100vh;
+    background-color: #f5f5f5;
+}
+

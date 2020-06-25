@@ -1,4 +1,5 @@
-import axios from 'axios'
+import axios from 'axios';
+import {getToken,getUserName} from "./session";
 const BASEURL = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_API : process.env.REACT_APP_API;
 
 const service = axios.create({
@@ -9,8 +10,8 @@ const service = axios.create({
 service.interceptors.request.use(function (config) {
 
   // 在发送请求之前做些什么
-  // config.headers['Tokey'] = getToken();
-  // config.headers['UserName'] = getUserName();
+  config.headers['Tokey'] = getToken();
+  config.headers['UserName'] = getUserName();
   
   return config;
 }, function (error) {

@@ -3,17 +3,30 @@ import { Form, Input, Button, Checkbox, Row, Col, message } from 'antd';
 import { UserOutlined, LockOutlined, SmileOutlined } from '@ant-design/icons';
 import { checkPassword, validateCode } from "../../utils/validate";
 import { Login } from "../../api/login"
-import Code from "../../component/code"
+import Code from "../../component/code";
+import {withRouter} from "react-router-dom";
+import {setToken,setUserName} from "../../utils/session"
 function LoginIndex(props) {
     const [username, setUsername] = useState("");
-
+    const [password, setPassword] = useState("");
+    const [code, setCode] = useState("");
     const onFinish = values => {
-        Login().then(res => {
-            console.log(res);
+        let requestData = {
+            username: username,
+            password: password,
+            code: code
+        };
+        Login(requestData).then(res => {
+
+            message.success(res.data.message, 3);
+
+            setToken(res.data.data.token);
+            setUserName(res.data.data.username);
+            props.history.push("/layout");
         }).catch(error => {
             console.log(error);
         })
-        console.log('Received values of form: ', values);
+
     };
     return (
         <Form
@@ -40,6 +53,8 @@ function LoginIndex(props) {
                     prefix={<LockOutlined className="site-form-item-icon" />}
                     type="password"
                     placeholder="Password"
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
                 />
             </Form.Item>
             <Form.Item
@@ -53,9 +68,11 @@ function LoginIndex(props) {
                         <Input
                             prefix={<SmileOutlined className="site-form-item-icon" />}
                             placeholder="Code"
+                            value={code}
+                            onChange={(event) => setCode(event.target.value)}
                         /></Col>
                     <Col span={8}>
-                        <Code username={username} />
+                        <Code username={username} module="login" />
                     </Col>
                 </Row>
             </Form.Item>
@@ -66,4 +83,5 @@ function LoginIndex(props) {
         </Form>
     )
 }
-export default LoginIndex;
+
+export default withRouter(LoginIndex); ;
