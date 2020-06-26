@@ -4,7 +4,7 @@ import "./nav.scss";
 import { NavLink } from "react-router-dom"
 import { Fragment } from 'react';
 import { Menu } from 'antd';
-import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
+import { UserOutlined, LaptopOutlined, TeamOutlined } from '@ant-design/icons';
 
 const { SubMenu } = Menu;
 
@@ -25,19 +25,30 @@ const Nav = props => {
                 <SubMenu key="sub1" icon={<UserOutlined />} title="控制台">
 
                     <Menu.Item key="1">
-                        {/* <NavLink exact to="/consoleIndex"> */}
+                        <NavLink exact to="/layout/consoleIndex">
                             主页
-                        {/* </NavLink> */}
-
+                        </NavLink>
                     </Menu.Item>
 
                 </SubMenu>
                 <SubMenu key="sub2" icon={<LaptopOutlined />} title="信息管理">
-                    <Menu.Item key="5">信息列表</Menu.Item>
-                    <Menu.Item key="6">信息分类</Menu.Item>
+                    <Menu.Item key="5">
+                        <NavLink exact to="/layout/infolist">
+                            信息列表
+                        </NavLink>
+                    </Menu.Item>
+                    <Menu.Item key="6">
+                        <NavLink exact to="/layout/infocategory">
+                            信息分类
+                        </NavLink>
+                    </Menu.Item>
                 </SubMenu>
-                <SubMenu key="sub3" icon={<NotificationOutlined />} title="用户管理">
-                    <Menu.Item key="9">用户列表</Menu.Item>
+                <SubMenu key="sub3" icon={<TeamOutlined />} title="用户管理">
+                    <Menu.Item key="9">
+                        <NavLink exact to="/layout/userlist">
+                            用户列表
+                        </NavLink>
+                    </Menu.Item>
 
                 </SubMenu>
             </Menu>

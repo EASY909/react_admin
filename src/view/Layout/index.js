@@ -7,6 +7,7 @@ import Main from "./component/Main";
 import "./index.scss";
 const { Header, Footer, Sider, Content } = Layout;
 const myLayout = props => {
+  
     return (
         <div>
             <Layout>
@@ -16,7 +17,9 @@ const myLayout = props => {
                 <Layout>
                     <Header className="headerIndex"><MyHeader></MyHeader> </Header>
                     <Content className="mainIndex">
-                        <Main></Main>
+                        <Main>
+                            {/* {props.children} */}
+                        </Main>
                     </Content>
                     {/* <Footer>Footer</Footer> */}
                 </Layout>
@@ -29,4 +32,4 @@ myLayout.propTypes = {
 
 };
 
-export default myLayout ;
+export default myLayout;

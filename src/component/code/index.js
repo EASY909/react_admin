@@ -19,6 +19,7 @@ const Code = memo((props) => {
             timer = setInterval(() => {
                 if (sec <= 0) {
                     clearInterval(timer);
+                    setIsSend(false)
                     setBut({
                         butLoading: false,
                         butTxt: "重新获取"

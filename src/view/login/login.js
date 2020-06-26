@@ -24,7 +24,7 @@ function LoginIndex(props) {
             setUserName(res.data.data.username);
             props.history.push("/layout");
         }).catch(error => {
-            console.log(error);
+            message.error(error.message, 3);
         })
 
     };
