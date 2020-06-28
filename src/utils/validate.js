@@ -26,7 +26,7 @@ export function timestampToTime(timestamp) {
     let hour = now.getHours();
     let minute = now.getMinutes();
     let second = now.getSeconds();
-    return year + "-" + month + "-" + date + "   " + hour + ":" + minute + ":" + second;
+    return year + "-" + month + "-" + date + "   ";
 }
 
 export function debounce(fn, delay) {
