@@ -5,13 +5,16 @@ import Nav from "./component/Nav";
 import MyHeader from "./component/Header";
 import Main from "./component/Main";
 import "./index.scss";
+import * as actionTypes from 'src/store/login/actionCreators';
+import { connect } from 'react-redux';
 const { Header, Footer, Sider, Content } = Layout;
 const myLayout = props => {
-  
+    const {isCollapse}=props;
+    // console.log(isCollapse);
     return (
         <div>
-            <Layout>
-                <Sider>
+            <Layout className={[isCollapse?'close':'open']}>
+                <Sider collapsed={isCollapse}>
                     <Nav></Nav>
                 </Sider>
                 <Layout>
@@ -19,6 +22,7 @@ const myLayout = props => {
                     <Content className="mainIndex">
                         <Main>
                             {/* {props.children} */}
+                            {/* <ContainerMain/> */}
                         </Main>
                     </Content>
                     {/* <Footer>Footer</Footer> */}
@@ -31,5 +35,12 @@ const myLayout = props => {
 myLayout.propTypes = {
 
 };
-
-export default myLayout;
+const mapStateToProps = state => {
+    return {
+        isCollapse: state.login.isCollapse
+    }
+}
+export default connect(
+    mapStateToProps
+    
+)(myLayout);

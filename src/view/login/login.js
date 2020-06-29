@@ -22,7 +22,7 @@ function LoginIndex(props) {
 
             setToken(res.data.data.token);
             setUserName(res.data.data.username);
-            props.history.push("/layout");
+            props.history.push("/layout/consoleIndex");
         }).catch(error => {
             message.error(error.message, 3);
         })

@@ -4,21 +4,30 @@ import "./header.scss"
 import { Fragment } from 'react';
 import { useState } from 'react';
 import { getUserName, removeToken, removeUserName } from "../../../../utils/session";
-import {withRouter} from "react-router-dom"
-
+// import { withRouter } from "react-router-dom";
+import { UnorderedListOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import * as actionTypes from 'src/store/login/actionCreators';
+import { connect } from 'react-redux';
 const MyHeader = props => {
+    const { isCollapse, toggleIsCollapseDispatch } = props;
+    // console.log(isCollapse);
+
+    const handlerIsCollse = () => {
+        // console.log(111);
+        toggleIsCollapseDispatch()
+    }
     const out = () => {
         removeToken();
         removeUserName();
         // console.log(props);
         props.history.push("/")
-        
+
     }
 
     return (
         <Fragment>
             <div className="pull-left header-icon">
-                {/* <svg-icon iconClass="menu" class="menu"></svg-icon> */}
+                <UnorderedListOutlined onClick={handlerIsCollse} />
             </div>
             <div className="pull-right">
                 <div className="user-info pull-left">
@@ -26,8 +35,7 @@ const MyHeader = props => {
                     {getUserName()}
                 </div>
                 <div className="header-icon pull-left">
-                    <button onClick={out}>退出</button>
-                    {/* <svg-icon iconClass="exit" class="exit"></svg-icon> */}
+                    <CloseCircleOutlined onClick={out} />
                 </div>
             </div>
         </Fragment>
@@ -38,4 +46,24 @@ MyHeader.propTypes = {
 
 };
 
-export default withRouter(MyHeader) ;
+
+const mapStateToProps = state => {
+    return {
+        isCollapse: state.login.isCollapse
+    }
+
+}
+
+// 映射 dispatch 到 props 上
+const mapDispatchToProps = dispatch => {
+    return {
+        toggleIsCollapseDispatch() {
+
+            dispatch(actionTypes.changeisCollapse());
+        },
+    };
+};
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(MyHeader);

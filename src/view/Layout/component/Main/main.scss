@@ -11,20 +11,9 @@
         padding-right: 30px;
         @include webkit(box-sizing, border-box);
         @include webkit(transition, all 0.3s ease 0s);
-        padding-left: $navMenuMin + 30;
+        // padding-left:30px;
     }
 
-    .open {
-        .main-content {
-            padding-left: $navMenu + 30;
-        }
-    }
-
-    .close {
-        .main-content {
-            padding-left: $navMenuMin + 30;
-        }
-    }
 
     .content {
         width: 100%;
@@ -32,5 +21,17 @@
         padding: 30px 30px 0px;
         @include webkit(box-sizing, border-box);
         background-color: #fff;
+    }
+}
+
+.open {
+    .main-content {
+        padding-left: 80px ;
+    }
+}
+
+.close {
+    .main-content {
+        padding-left:  30px;
     }
 }

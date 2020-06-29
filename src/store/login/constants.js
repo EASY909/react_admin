@@ -1,0 +1,1 @@
+export const SET_COLLAPSE = 'login/SET_COLLAPSE';

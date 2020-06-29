@@ -1,14 +1,56 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import "./nav.scss";
-import { NavLink } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { Fragment } from 'react';
 import { Menu } from 'antd';
-import { UserOutlined, LaptopOutlined, TeamOutlined } from '@ant-design/icons';
+import { LaptopOutlined, ProfileOutlined, TeamOutlined } from '@ant-design/icons';
+import Router from "../../../../router/index";
 
 const { SubMenu } = Menu;
 
 const Nav = props => {
+    const {isCollapse}=props;
+    // console.log(isCollapse);
+    const handleIcon = (icon) => {
+        switch (icon) {
+            case "layout":
+                return <LaptopOutlined />
+                break;
+            case "info":
+                return <ProfileOutlined />
+                break;
+
+            case "user":
+                return <TeamOutlined />
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    // 无子级菜单处理
+    const renderMenu = ({ title, key }) => {
+        return (
+            <Menu.Item key={key}>
+                <Link to={key}><span>{title}</span></Link>
+            </Menu.Item>
+        )
+    }
+
+    // 子级菜单处理
+    const renderSubMenu = ({ title, key, children, icon }) => {
+        return (
+            <SubMenu key={key} icon={handleIcon(icon)} title={title}>
+                {
+                    children && children.map(item => {
+                        return item.children && item.children.length > 0 ? renderSubMenu(item) : renderMenu(item);
+                    })
+                }
+            </SubMenu>
+        )
+    }
     return (
         <div className="navIndex">
 
@@ -22,7 +64,12 @@ const Nav = props => {
                 defaultOpenKeys={['sub1']}
                 style={{ height: '100%', borderRight: 0 }}
             >
-                <SubMenu key="sub1" icon={<UserOutlined />} title="控制台">
+                {
+                    Router && Router.map(firstItem => {
+                        return firstItem.children && firstItem.children.length > 0 ? renderSubMenu(firstItem) : renderMenu(firstItem);
+                    })
+                }
+                {/* <SubMenu key="sub1" icon={<UserOutlined />} title="控制台">
 
                     <Menu.Item key="1">
                         <NavLink exact to="/layout/consoleIndex">
@@ -44,15 +91,15 @@ const Nav = props => {
                     </Menu.Item>
                 </SubMenu>
                 <SubMenu key="sub3" icon={<TeamOutlined />} title="用户管理">
-                    <Menu.Item key="9">
-                        <NavLink exact to="/layout/userlist">
-                            用户列表
+                <Menu.Item key="9">
+                    <NavLink exact to="/layout/userlist">
+                        用户列表
                         </NavLink>
-                    </Menu.Item>
+                </Menu.Item>
 
-                </SubMenu>
+                </SubMenu> */}
             </Menu>
-        </div>
+        </div >
     );
 };
 
