@@ -5,7 +5,7 @@ import MyDropDown from "../../../component/dropdown";
 import { AddInfo } from "../../../api/news.js";
 
 const Info = memo((props) => {
-    let { visible: pvisible, close, data } = props;
+    let { visible: pvisible, close, data,getList } = props;
     let [loading, setLoading] = useState(false);
     let [formValue, setForm] = useState({
         categoryId: "",
@@ -28,7 +28,8 @@ const Info = memo((props) => {
                 message.success(Response.data.message, 3);
                 form.resetFields();
                 close();
-                setLoading(false)
+                setLoading(false);
+                getList(1)
                 // this.$emit("getList", false);
             })
             .catch(error => {
@@ -110,12 +111,14 @@ const Info = memo((props) => {
 Info.defaultProps = {
     visible: false,
     close: null,
-    data: []
+    data: [],
+    getList:null
 };
 Info.propTypes = {
     visible: PropTypes.bool,
     close: PropTypes.func,
-    data: PropTypes.array
+    data: PropTypes.array,
+    getList:PropTypes.func
 };
 
 export default Info;

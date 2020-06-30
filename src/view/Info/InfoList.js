@@ -1,23 +1,25 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import MyDropDown from "../../component/dropdown";
-import { Row, Col, DatePicker, Input, Button, Tag, Space } from 'antd';
+import { Row, Col, DatePicker, Input, Button, Tag, Space, Modal, message } from 'antd';
 import locale from 'antd/lib/date-picker/locale/zh_CN';
 import "./InfoList.scss";
 import MyTable from "../../component/table";
-import { GetCategory, GetList } from "../../api/news"
+import { GetCategory, GetList, DeleteInfo } from "../../api/news"
 import { useEffect, useCallback, useState, memo } from 'react';
 import Info from "./dialog/info";
+import Edit from "./dialog/edit"
 import { timestampToTime } from "../../utils/validate"
 
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+const { confirm } = Modal;
 const { RangePicker } = DatePicker;
-
 const InfoList = memo(props => {
     let [category, setCategory] = useState([]);
     let [visible, setVisible] = useState(false);
     let [data, setData] = useState([]);
     let [columns, setColumns] = useState([]);
-
+    let [deleteId, setDeleteId] = useState([]);
     const onChange = page => {
         getList(page);
     };
@@ -73,8 +75,33 @@ const InfoList = memo(props => {
 
             });
     }
-    const handlerDel=(val)=>{
-        console.log(val);
+    // useEffect(()=>{
+    //     console.log(deleteId);
+    // },[deleteId])
+    // const handlerDel=(val)=>{
+    //     console.log(val);
+    // }
+    const deleteAll = () => {
+        
+
+        if(deleteId.length===0){
+            message.error("取消删除", 3);
+        }
+        confirm({
+            title: '确定删除？',
+            icon: <ExclamationCircleOutlined />,
+            okText: '是',
+            okType: 'danger',
+            cancelText: '否',
+            onOk() {
+                confirmDelete(deleteId)
+            },
+            onCancel() {
+
+                message.success("取消删除", 3);
+            },
+        });
+
     }
     useEffect(() => {
         const columns = [
@@ -108,7 +135,7 @@ const InfoList = memo(props => {
                 key: 'option',
                 render: (text, record) => (
                     <Space size="middle">
-                        <Button type="primary" onClick={()=>handlerDel(text.id)} danger>删除</Button>
+                        <Button type="primary" onClick={() => showDeleteConfirm(text.id)} danger>删除</Button>
                         <Button type="primary">编辑</Button>
                         <Button >编辑详情</Button>
                     </Space>
@@ -119,6 +146,38 @@ const InfoList = memo(props => {
 
     }, [category])
 
+
+    const confirmDelete = (id) => {
+        let idList = [];
+        if (typeof id === "string") {
+            idList.push(id);
+        } else {
+            idList = id;
+        }
+        DeleteInfo({ id: idList })
+            .then(res => {
+                getList(1);
+            })
+            .catch(error => { });
+    }
+
+    const showDeleteConfirm = (id) => {
+
+        confirm({
+            title: '确定删除？',
+            icon: <ExclamationCircleOutlined />,
+            okText: '是',
+            okType: 'danger',
+            cancelText: '否',
+            onOk() {
+                confirmDelete(id);
+            },
+            onCancel() {
+
+                message.success("取消删除", 3);
+            },
+        });
+    }
     return (
         <div>
             <Row gutter={16}>
@@ -168,9 +227,11 @@ const InfoList = memo(props => {
 
             </Row>
             <div className="black-space-30"></div>
-            <MyTable pagination={pagination} columns={columns} data={data} />
+            <MyTable  setDeleteId={setDeleteId} pagination={pagination} deleteAll={deleteAll} columns={columns} data={data} />
 
-            <Info data={category} visible={visible} close={close} />
+            <Info data={category} getList={getList} visible={visible} close={close} />
+
+            <Edit/>
         </div >
     );
 })
