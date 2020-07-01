@@ -4,7 +4,7 @@ import "./header.scss"
 import { Fragment } from 'react';
 import { useState } from 'react';
 import { getUserName, removeToken, removeUserName } from "../../../../utils/session";
-// import { withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { UnorderedListOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import * as actionTypes from 'src/store/login/actionCreators';
 import { connect } from 'react-redux';
@@ -63,7 +63,7 @@ const mapDispatchToProps = dispatch => {
         },
     };
 };
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(MyHeader);
+)(MyHeader)) 

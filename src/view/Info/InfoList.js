@@ -17,9 +17,11 @@ const { RangePicker } = DatePicker;
 const InfoList = memo(props => {
     let [category, setCategory] = useState([]);
     let [visible, setVisible] = useState(false);
+    let [editvisible, setEditVisible] = useState(false);
     let [data, setData] = useState([]);
     let [columns, setColumns] = useState([]);
     let [deleteId, setDeleteId] = useState([]);
+    let [editId, setEditId] = useState("");
     const onChange = page => {
         getList(page);
     };
@@ -46,6 +48,13 @@ const InfoList = memo(props => {
         setVisible(false)
     }, [])
 
+    const showEdit = useCallback((id) => {
+        setEditId(id)
+        setEditVisible(true);
+    }, []);
+    const closeEdit = useCallback(() => {
+        setEditVisible(false)
+    }, [])
 
     const getList = (pageNumber) => {
         let resData = {
@@ -82,9 +91,9 @@ const InfoList = memo(props => {
     //     console.log(val);
     // }
     const deleteAll = () => {
-        
 
-        if(deleteId.length===0){
+
+        if (deleteId.length === 0) {
             message.error("取消删除", 3);
         }
         confirm({
@@ -136,7 +145,7 @@ const InfoList = memo(props => {
                 render: (text, record) => (
                     <Space size="middle">
                         <Button type="primary" onClick={() => showDeleteConfirm(text.id)} danger>删除</Button>
-                        <Button type="primary">编辑</Button>
+                        <Button type="primary" onClick={() => showEdit(text.id)}>编辑</Button>
                         <Button >编辑详情</Button>
                     </Space>
                 ),
@@ -227,11 +236,11 @@ const InfoList = memo(props => {
 
             </Row>
             <div className="black-space-30"></div>
-            <MyTable  setDeleteId={setDeleteId} pagination={pagination} deleteAll={deleteAll} columns={columns} data={data} />
+            <MyTable setDeleteId={setDeleteId} pagination={pagination} deleteAll={deleteAll} columns={columns} data={data} />
 
             <Info data={category} getList={getList} visible={visible} close={close} />
 
-            <Edit/>
+            <Edit data={category} editId={editId} getList={getList} visible={editvisible} close={closeEdit} />
         </div >
     );
 })

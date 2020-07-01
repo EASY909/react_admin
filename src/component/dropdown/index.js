@@ -7,13 +7,13 @@ const { Option } = Select;
 
 
 const MyDropDown = memo((props) => {
-    let { data,change } = props;
+    let { data,change,cateId } = props;
     let [category, setCategory] = useState("");
     function handleChange(value) {
         change(value)
     }
     return (
-        <Select onChange={handleChange} defaultValue="请选择" style={{ width: 120 }}>
+        <Select onChange={handleChange} defaultValue={cateId} style={{ width: 120 }}>
             {
                 data.map((item, index) => {
                     return <Option key={item.id} value={item.id}>{item.category_name}</Option>
@@ -26,11 +26,13 @@ const MyDropDown = memo((props) => {
 
 MyDropDown.defaultProps = {
     data: [],
-    change:null
+    change:null,
+    cateId:"请选择"
 };
 MyDropDown.propTypes = {
     data: PropTypes.array,
-    change:PropTypes.func
+    change:PropTypes.func,
+    cateId:PropTypes.string
 };
 
 export default MyDropDown;
