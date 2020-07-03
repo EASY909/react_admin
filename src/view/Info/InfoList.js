@@ -78,6 +78,7 @@ const InfoList = memo(props => {
                     item.key = index;
                 })
                 setData(tdata);
+                // setPagination({...pagination,current:1})
 
             })
             .catch(error => {
@@ -240,7 +241,7 @@ const InfoList = memo(props => {
 
             <Info data={category} getList={getList} visible={visible} close={close} />
 
-            <Edit data={category} editId={editId} getList={getList} visible={editvisible} close={closeEdit} />
+            <Edit data={category} editId={editId} pgetList={getList} visible={editvisible} close={closeEdit} />
         </div >
     );
 })

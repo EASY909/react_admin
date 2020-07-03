@@ -1,13 +1,12 @@
 import React, { memo, useState, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Form, Input, Button, Checkbox, message, Select } from 'antd';
-import MyDropDown from "../../../component/dropdown";
-import { AddInfo } from "../../../api/news.js";
-import { GetList } from "src/api/news";
+import MyDropDown from "src/component/dropdown";
+import { GetList, EdidInfo } from "src/api/news";
 const { Option } = Select;
 const Edit = memo((props) => {
-    console.log(122);
-    let { visible: pvisible, close, data, editId } = props;
+    // console.log(122);
+    let { visible: pvisible, close, data, editId, pgetList } = props;
     let [loading, setLoading] = useState(false);
     let [formValue, setForm] = useState({
         categoryId: "",
@@ -15,9 +14,9 @@ const Edit = memo((props) => {
         content: ""
     });
     // let [title, setTitle] = useState("");
-    let [listData, setDataList] = useState([])
+    // let [listData, setDataList] = useState([])
     // let { data,change,cateId } = props;
-    let [category, setCategory] = useState("");
+    // let [category, setCategory] = useState("");
     function handleChange(value) {
         // change(value)
         // console.log(value);
@@ -30,12 +29,43 @@ const Edit = memo((props) => {
 
     const onFinish = values => {
         console.log(formValue);
-        // if (formValue.categoryId === "" || formValue.title === "" || formValue.content === "") {
-        //     message.success("不能为空！", 3);
-        //     return
-        // }
+        if (formValue.categoryId === "" || formValue.title === "" || formValue.content === "") {
+            message.success("不能为空！", 3);
+            return
+        }
+        setLoading(true)
+        let data = {
+            id: editId,
+            categoryId: formValue.categoryId,
+            title: formValue.title,
+            content: formValue.content
+        };
+        EdidInfo(data)
+            .then(Response => {
 
-        // setLoading(true)
+                console.log(Response.data.message);
+                // this.$message({
+                //     message: Response.data.message,
+                //     type: "success"
+                // });
+                //   this.form.name = "";
+                //   this.form.content = "";
+                //   this.form.categroy = "";
+                // close();
+                // this.subloading = false;
+
+                // this.$emit("getList", false);
+                message.success(Response.data.message, 3);
+                form.resetFields();
+                close();
+                setLoading(false);
+                pgetList(1);
+            })
+            .catch(error => {
+                setLoading(false);
+                // this.subloading = false;
+            });
+
 
         // AddInfo(formValue)
         //     .then(Response => {
@@ -55,7 +85,13 @@ const Edit = memo((props) => {
         form.resetFields();
         close();
     };
+    useEffect(() => {
+        // console.log(pvisible);
+        if (editId === "") return
+        if (pvisible) getList(1)
 
+
+    }, [pvisible])
     // const DropDownChange = (val) => {
     //     setForm({
     //         ...formValue,
@@ -99,44 +135,31 @@ const Edit = memo((props) => {
         GetList(resData)
             .then(res => {
                 let data = res.data.data.data;
-                // form.setFieldsValue({
-                //     categroy: data[0].categoryId,
-                //     title: data[0].title,
-                //     content: data[0].content,
-                // })
+                // setDataList(data);
                 // console.log(data);
-                // console.log( data[0].categoryId);
-                // console.log( data[0].title);
-                // console.log( data[0].content);
-                setDataList(data);
-                // return data;
+                form.setFieldsValue({
+                    categroy: data[0].categoryId,
+                    title: data[0].title,
+                    content: data[0].content
+                })
+                setForm({
+                    categoryId: data[0].categoryId,
+                    title: data[0].title,
+                    content: data[0].content
+                })
             })
             .catch(error => {
-
             });
     }
-    const list = useMemo(() => {
-        // return getList(1);
-        // console.log(getList(1));
-        // console.log(list);
-        // if (list.length !== 0) {
 
-        // }
-        getList(1);
-        return listData;
-        // return 
-    }, [editId])
+    // const list = useMemo(() => {
+    //     getList(1);
+    //     return listData;
+    //     // return 
+    // }, [editId])
 
 
-    useEffect(() => {
-        if(listData.length!==0){
-            form.setFieldsValue({
-                categroy: listData[0].categoryId,
-                title: listData[0].title,
-                content: listData[0].content,
-            })
-        }
-    })
+
     return (
         <div>
             <div>
@@ -210,15 +233,15 @@ Edit.defaultProps = {
     visible: false,
     close: null,
     data: [],
-    getList: null,
-    editId: ""
+    pgetList: null,
+    editId: "",
 };
 Edit.propTypes = {
     visible: PropTypes.bool,
     close: PropTypes.func,
     data: PropTypes.array,
-    getList: PropTypes.func,
-    editId: PropTypes.string
+    pgetList: PropTypes.func,
+    editId: PropTypes.string,
 };
 
 export default Edit;
